@@ -1,33 +1,35 @@
 #include "binary_trees.h"
-#include <stdlib.h>
+
 /**
- * binary_tree_insert_right - inserts a node as the right-child of another node
- * @parent: is a pointer to the node to insert the right-child in
- * @value: is the value to store in the new node
- * Return: a pointer to the created node, or NULL
+ * binary_tree_insert_right - Insert a node as the right-child
+ *                            of another in a binary tree.
+ * @parent: A pointer to the node to insert the right-child in.
+ * @value: The value to store in the new node.
+ *
+ * Return: If parent is NULL or an error occurs - NULL.
+ *         Otherwise - a pointer to the new node.
+ *
+ * Description: If parent already has a right-child, the new node
+ *              takes its place and the old right-child is set as
+ *              the right-child of the new node.
  */
 binary_tree_t *binary_tree_insert_right(binary_tree_t *parent, int value)
 {
+	binary_tree_t *new;
 
-	binary_tree_t *new_right = NULL;
-	binary_tree_t *temp = NULL;
-
-	new_right = malloc(sizeof(binary_tree_t));
-	if (!new_right || !parent)
+	if (parent == NULL)
 		return (NULL);
 
-	new_right->n = value;
-	new_right->parent = parent;
-	new_right->left = new_right->right = NULL;
-	if (!parent->right)
-		parent->right = new_right;
+	new = binary_tree_node(parent, value);
+	if (new == NULL)
+		return (NULL);
 
-	else
+	if (parent->right != NULL)
 	{
-		temp = parent->right;
-		parent->right = new_right;
-		new_right->right = temp;
-		temp->parent = new_right;
+		new->right = parent->right;
+		parent->right->parent = new;
 	}
-	return (new_right);
+	parent->right = new;
+
+	return (new);
 }
